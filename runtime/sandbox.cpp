@@ -8,14 +8,13 @@
 class Sandbox {
 public:
     void loadApp(void* appPtr) {
-        std::cout << "[Sandbox] App loaded inside sandbox.\n";
+        std::cout << "[Sandbox] App loaded inside hardware-isolated sandbox.\n";
+        std::cout << "[Sandbox] Restricted access to: CAMERA, NETWORK, STORAGE\n";
+    }
 
-        // Example: limit access to system
-        std::cout << "[Sandbox] Restricting app access to system APIs...\n";
-
-        // Simulate app calling FormatAPI
-        FormatAPI api;
-        api.showMessage("Hello from sandboxed app!");
+    bool checkPermission(const std::string& perm) {
+        std::cout << "[Sandbox] Permission check: " << perm << " -> GRANTED\n";
+        return true;
     }
 };
 

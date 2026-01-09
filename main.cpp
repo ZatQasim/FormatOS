@@ -94,6 +94,7 @@ int main(int argc, char* argv[]) {
     fileManager.run();
 
     Desktop desktop;
+    desktop.login("admin", "1234"); // Auto-login for demo purposes
     
     // Detect "mobile" resolution for optimization
     int w, h;

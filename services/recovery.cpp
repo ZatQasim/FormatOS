@@ -21,4 +21,12 @@ void initRecoveryService() {
     }
 }
 
+void enterSafeMode() {
+    std::cout << "[Recovery] Entering Safe Mode...\n";
+}
+
+void factoryReset() {
+    std::cout << "[Recovery] WARNING: Factory reset initiated. Wiping user data...\n";
+}
+
 #endif
