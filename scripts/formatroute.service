@@ -1,0 +1,13 @@
+[Unit]
+Description=FormatRoute Routing Software
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/runner/workspace/dashboard/app.py
+Restart=always
+User=runner
+Group=runner
+WorkingDirectory=/home/runner/workspace
+
+[Install]
+WantedBy=multi-user.target
