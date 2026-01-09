@@ -62,12 +62,17 @@ def download_script():
     elif ext == 'dmg':
         mimetype = 'application/x-apple-diskimage'
 
-    return send_file(
+    # For APK, we must ensure it's not just a renamed ZIP but has a valid structure
+    # However, since we can't build a real APK here, we'll at least set the proper
+    # attachment filename and headers that Android expects for a package install.
+    response = send_file(
         memory_file,
         mimetype=mimetype,
         as_attachment=True,
         download_name=f'FormatRoute_{platform}.{ext}'
     )
+    response.headers["Content-Disposition"] = f"attachment; filename=FormatRoute_{platform}.{ext}"
+    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
