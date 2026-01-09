@@ -14,6 +14,8 @@
 
 #include "../apps/media_viewer_app.h"
 
+#include "../apps/app_manager_app.h"
+
 class Desktop {
 private:
     WindowManager wm;
@@ -29,6 +31,7 @@ public:
         systemApps.push_back(new FileManagerApp());
         systemApps.push_back(new BrowserApp());
         systemApps.push_back(new MediaViewerApp());
+        systemApps.push_back(new AppManagerApp());
     }
 
     ~Desktop() {

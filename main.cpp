@@ -102,6 +102,8 @@ int main(int argc, char* argv[]) {
 
     desktop.openAppWindow("Settings");
     desktop.openAppWindow("File Manager");
+    desktop.openAppWindow("Browser");
+    desktop.openAppWindow("App Manager");
     bool running = true;
     SDL_Event e;
 
