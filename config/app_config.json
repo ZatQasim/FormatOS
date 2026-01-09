@@ -1,0 +1,24 @@
+{
+  "apps": [
+    {
+      "name": "Example App",
+      "path": "apps/example_app.cpp",
+      "auto_start": true
+    },
+    {
+      "name": "File Explorer",
+      "path": "apps/file_explorer.cpp",
+      "auto_start": false
+    },
+    {
+      "name": "Browser",
+      "path": "apps/browser.cpp",
+      "auto_start": false
+    },
+    {
+      "name": "Settings",
+      "path": "apps/settings.cpp",
+      "auto_start": false
+    }
+  ]
+}

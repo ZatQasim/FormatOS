@@ -1,0 +1,7 @@
+{
+  "kernel_path": "linux_kernel/vmlinuz",
+  "initrd_path": "initrd.img",
+  "cmdline": "root=/dev/sda1 quiet splash",
+  "timeout_seconds": 5,
+  "default_entry": "FormatOS"
+}

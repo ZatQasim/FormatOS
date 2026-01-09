@@ -1,0 +1,13 @@
+{
+  "os_name": "FormatOS",
+  "version": "0.1-alpha",
+  "default_user": "admin",
+  "boot_timeout": 5,
+  "theme": "light",
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "network_enabled": true,
+  "auto_update": false
+}

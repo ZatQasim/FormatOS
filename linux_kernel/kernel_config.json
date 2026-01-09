@@ -1,0 +1,7 @@
+{
+  "kernel_version": "5.20.0-formatos",
+  "supported_arch": "x86_64",
+  "modules_enabled": true,
+  "logging": true,
+  "default_scheduler": "round_robin"
+}
