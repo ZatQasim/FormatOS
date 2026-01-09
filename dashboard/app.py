@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 
 # Ensure project root is in path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -8,6 +9,9 @@ from flask import Flask, render_template, jsonify, request
 from network.monitor import get_interfaces_real, get_stats_real
 
 app = Flask(__name__)
+
+# Start high-performance core in background
+subprocess.Popen(["./network/routing_core"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 @app.route('/')
 def index():
