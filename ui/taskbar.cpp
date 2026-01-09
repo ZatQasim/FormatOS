@@ -45,13 +45,14 @@ private:
 
 public:
     void render(SDL_Renderer* renderer, int screenWidth, int screenHeight) {
-        // Modern Taskbar
-        SDL_SetRenderDrawColor(renderer, 20, 20, 25, 230); // Transparent dark
-        SDL_Rect bar = {0, screenHeight - 50, screenWidth, 50};
+        // Modern Floating Taskbar
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 40, 42, 54, 220); 
+        SDL_Rect bar = {screenWidth / 4, screenHeight - 60, screenWidth / 2, 50};
         SDL_RenderFillRect(renderer, &bar);
 
-        renderLogo(renderer, 15, screenHeight - 40);
-        renderIndicators(renderer, screenWidth - 120, screenHeight - 35);
+        renderLogo(renderer, screenWidth / 4 + 15, screenHeight - 50);
+        renderIndicators(renderer, screenWidth * 3/4 - 120, screenHeight - 45);
     }
 
     void addApp(const std::string& appName) {

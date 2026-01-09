@@ -58,25 +58,36 @@ public:
         for (const auto &w : windows) {
             if (w.isOpen) {
                 // Modern Glass-like window
-                SDL_SetRenderDrawColor(renderer, 45, 45, 50, 240);
-                SDL_Rect shadow = {w.x + 5, w.y + 5, w.width, w.height};
+                SDL_SetRenderDrawColor(renderer, 50, 52, 60, 245);
+                SDL_Rect shadow = {w.x + 8, w.y + 8, w.width, w.height};
                 SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 50);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 80); // Softer shadow
                 SDL_RenderFillRect(renderer, &shadow);
 
-                SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
+                SDL_SetRenderDrawColor(renderer, 40, 42, 54, 255);
                 SDL_Rect frame = {w.x, w.y, w.width, w.height};
                 SDL_RenderFillRect(renderer, &frame);
 
-                // Modern Title Bar
-                SDL_SetRenderDrawColor(renderer, 60, 60, 70, 255);
-                SDL_Rect titleBar = {w.x, w.y, w.width, 35};
+                // Modern Title Bar (Linux Adwaita style)
+                SDL_SetRenderDrawColor(renderer, 50, 54, 60, 255);
+                SDL_Rect titleBar = {w.x, w.y, w.width, 40};
                 SDL_RenderFillRect(renderer, &titleBar);
 
-                // Close Button (Red dot)
-                SDL_SetRenderDrawColor(renderer, 255, 95, 87, 255);
-                SDL_Rect closeBtn = {w.x + 10, w.y + 10, 12, 12};
+                // Control Buttons
+                // Close (Red)
+                SDL_SetRenderDrawColor(renderer, 255, 85, 85, 255);
+                SDL_Rect closeBtn = {w.x + 15, w.y + 14, 12, 12};
                 SDL_RenderFillRect(renderer, &closeBtn);
+                
+                // Minimize (Yellow)
+                SDL_SetRenderDrawColor(renderer, 255, 184, 108, 255);
+                SDL_Rect minBtn = {w.x + 35, w.y + 14, 12, 12};
+                SDL_RenderFillRect(renderer, &minBtn);
+                
+                // Maximize (Green)
+                SDL_SetRenderDrawColor(renderer, 80, 250, 123, 255);
+                SDL_Rect maxBtn = {w.x + 55, w.y + 14, 12, 12};
+                SDL_RenderFillRect(renderer, &maxBtn);
             }
         }
     }

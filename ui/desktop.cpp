@@ -49,19 +49,20 @@ public:
         SDL_RenderClear(renderer);
 
         // GNOME-style Sidebar Launcher
-        SDL_SetRenderDrawColor(renderer, 20, 20, 20, 220);
-        SDL_Rect sidebar = {5, 5, 50, h - 60};
+        SDL_SetRenderDrawColor(renderer, 40, 42, 54, 240); // Material design dark
+        SDL_Rect sidebar = {10, 10, 60, h - 70};
         SDL_RenderFillRect(renderer, &sidebar);
 
         // Sidebar Apps with simple hover/animation effect (placeholder)
         for (size_t i = 0; i < systemApps.size(); ++i) {
-            SDL_SetRenderDrawColor(renderer, 45, 45, 45, 255);
-            SDL_Rect icon = {12, 25 + (int)i * 60, 36, 36};
+            // Rounded icon background
+            SDL_SetRenderDrawColor(renderer, 60, 64, 72, 255);
+            SDL_Rect icon = {20, 30 + (int)i * 70, 40, 40};
             SDL_RenderFillRect(renderer, &icon);
             
-            // Animation dot for running apps
-            SDL_SetRenderDrawColor(renderer, 0, 200, 255, 255);
-            SDL_Rect dot = {2, 40 + (int)i * 60, 4, 10};
+            // Interaction highlight (active app indicator)
+            SDL_SetRenderDrawColor(renderer, 80, 250, 123, 255); // Vibrant green
+            SDL_Rect dot = {12, 45 + (int)i * 70, 4, 10};
             SDL_RenderFillRect(renderer, &dot);
         }
 
