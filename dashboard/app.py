@@ -1,11 +1,13 @@
 import os
-import subprocess
-import json
+import sys
+
+# Ensure project root is in path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from flask import Flask, render_template, jsonify, request
+from network.monitor import get_interfaces_real, get_stats_real
 
 app = Flask(__name__)
-
-from network.monitor import get_interfaces_real, get_stats_real
 
 @app.route('/')
 def index():
