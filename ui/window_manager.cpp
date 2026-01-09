@@ -57,15 +57,26 @@ public:
     void renderWindows(SDL_Renderer* renderer) {
         for (const auto &w : windows) {
             if (w.isOpen) {
-                // Draw window frame
-                SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+                // Modern Glass-like window
+                SDL_SetRenderDrawColor(renderer, 45, 45, 50, 240);
+                SDL_Rect shadow = {w.x + 5, w.y + 5, w.width, w.height};
+                SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 50);
+                SDL_RenderFillRect(renderer, &shadow);
+
+                SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
                 SDL_Rect frame = {w.x, w.y, w.width, w.height};
                 SDL_RenderFillRect(renderer, &frame);
 
-                // Draw title bar
-                SDL_SetRenderDrawColor(renderer, 50, 50, 200, 255);
-                SDL_Rect titleBar = {w.x, w.y, w.width, 30};
+                // Modern Title Bar
+                SDL_SetRenderDrawColor(renderer, 60, 60, 70, 255);
+                SDL_Rect titleBar = {w.x, w.y, w.width, 35};
                 SDL_RenderFillRect(renderer, &titleBar);
+
+                // Close Button (Red dot)
+                SDL_SetRenderDrawColor(renderer, 255, 95, 87, 255);
+                SDL_Rect closeBtn = {w.x + 10, w.y + 10, 12, 12};
+                SDL_RenderFillRect(renderer, &closeBtn);
             }
         }
     }

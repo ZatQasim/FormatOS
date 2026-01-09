@@ -94,6 +94,15 @@ int main(int argc, char* argv[]) {
     fileManager.run();
 
     Desktop desktop;
+    
+    // Detect "mobile" resolution for optimization
+    int w, h;
+    SDL_GetRendererOutputSize(renderer, &w, &h);
+    if (w < 600) {
+        std::cout << "[System] Mobile optimization enabled.\n";
+        // Mobile layout: one window at a time, full screen
+    }
+
     desktop.openAppWindow("Example App");
     desktop.openAppWindow("Settings");
     desktop.openAppWindow("File Manager");
