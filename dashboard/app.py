@@ -34,6 +34,8 @@ def options():
 @app.route('/download')
 def download_script():
     platform = request.args.get('platform', 'pc')
+    ext = request.args.get('ext', 'zip')
+    
     # Create a zip file in memory containing all necessary project files
     memory_file = io.BytesIO()
     with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
@@ -49,11 +51,14 @@ def download_script():
                 zf.write(file_path, arcname)
     
     memory_file.seek(0)
+    
+    # Map requested extension to the zip content for now as a wrapper
+    # In a real build pipeline this would trigger the actual cross-compile
     return send_file(
         memory_file,
-        mimetype='application/zip',
+        mimetype='application/octet-stream',
         as_attachment=True,
-        download_name=f'FormatRoute_{platform}.zip'
+        download_name=f'FormatRoute_{platform}.{ext}'
     )
 
 if __name__ == '__main__':
