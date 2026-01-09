@@ -10,11 +10,14 @@
 #include "../apps/file_manager_app.h"
 #include "../apps/browser_app.h"
 
+#include "notification.h"
+
 class Desktop {
 private:
     WindowManager wm;
     Taskbar taskbar;
     UserManager userManager;
+    NotificationManager nm;
     bool isAuthenticated;
     std::vector<App*> systemApps;
 
@@ -38,21 +41,28 @@ public:
         int w, h;
         SDL_GetRendererOutputSize(renderer, &w, &h);
 
-        // Draw wallpaper (Modern gradient look)
-        SDL_SetRenderDrawColor(renderer, 20, 40, 60, 255);
+        // Linux-style Desktop (Dark Grey/Slate)
+        SDL_SetRenderDrawColor(renderer, 30, 31, 34, 255);
         SDL_RenderClear(renderer);
 
-        // Draw modern icons
+        // Sidebar Launcher (GNOME-style)
+        SDL_SetRenderDrawColor(renderer, 20, 20, 20, 200);
+        SDL_Rect sidebar = {0, 0, 60, h - 50};
+        SDL_RenderFillRect(renderer, &sidebar);
+
         for (size_t i = 0; i < systemApps.size(); ++i) {
-            SDL_SetRenderDrawColor(renderer, 50, 100, 150, 255);
-            SDL_Rect icon = {40, 40 + (int)i * 100, 64, 64};
+            SDL_SetRenderDrawColor(renderer, 60, 60, 60, 255);
+            SDL_Rect icon = {10, 20 + (int)i * 60, 40, 40};
             SDL_RenderFillRect(renderer, &icon);
-            // Label
-            std::cout << "[Desktop] Rendering icon for: " << systemApps[i]->name << "\n";
         }
 
         wm.renderWindows(renderer);
         taskbar.render(renderer, w, h);
+        nm.render(renderer, w);
+    }
+
+    void notify(const std::string& msg) {
+        nm.send(msg);
     }
 
     void renderLogin(SDL_Renderer* renderer) {

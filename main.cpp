@@ -95,6 +95,8 @@ int main(int argc, char* argv[]) {
 
     Desktop desktop;
     desktop.login("admin", "1234"); // Auto-login for demo purposes
+    desktop.notify("Welcome to FormatOS");
+    desktop.notify("System Update Available");
     
     // Detect "mobile" resolution for optimization
     int w, h;
