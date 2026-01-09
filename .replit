@@ -24,5 +24,18 @@ waitForPort = 5000
 [workflows.workflow.metadata]
 outputType = "webview"
 
+[[workflows.workflow]]
+name = "Systems"
+mode = "sequential"
+author = 52806342
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = 'g++ main.cpp bootloader/boot.cpp linux_kernel/kernel_main.cpp \ services/recovery.cpp runtime/app_loader.cpp apps/example_app.cpp \ -o os_entry `sdl2-config --cflags --libs`'
+
 [agent]
 expertMode = true
+
+[nix]
+packages = ["wget"]
+channel = "stable-25_05"
