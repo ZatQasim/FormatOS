@@ -52,14 +52,54 @@
                 <div class="card">
                     <div class="card-body">
                         <h5>Traffic Throughput (Real-time)</h5>
-                        <div id="traffic-chart" style="height: 200px; background: #2d333b; border-radius: 8px; position: relative;">
-                            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 50%; background: rgba(13, 110, 253, 0.2); border-top: 2px solid #0d6efd;"></div>
+                        <div id="traffic-chart" style="height: 200px; background: #2d333b; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 0 10px;">
+                            <div id="chart-bars" style="display: flex; gap: 2px; width: 100%; height: 100%; align-items: flex-end;"></div>
                         </div>
-                        <p class="text-muted mt-2">Monitoring active packets via C++ Core...</p>
+                        <div class="d-flex justify-content-between mt-2">
+                            <small class="text-success">Incoming: <span id="real-rx">0 KB/s</span></small>
+                            <small class="text-primary">Outgoing: <span id="real-tx">0 KB/s</span></small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            let lastBytes = { rx: 0, tx: 0, time: Date.now() };
+            const history = [];
+            const maxHistory = 50;
+
+            function updateTraffic() {
+                fetch('/api/traffic')
+                    .then(res => res.json())
+                    .then(data => {
+                        const now = Date.now();
+                        const dt = (now - lastBytes.time) / 1000;
+                        
+                        if (lastBytes.rx > 0) {
+                            const rxSpeed = (data.bytes_recv - lastBytes.rx) / dt;
+                            const txSpeed = (data.bytes_sent - lastBytes.tx) / dt;
+                            
+                            document.getElementById('real-rx').innerText = (rxSpeed / 1024).toFixed(2) + ' KB/s';
+                            document.getElementById('real-tx').innerText = (txSpeed / 1024).toFixed(2) + ' KB/s';
+                            
+                            history.push(rxSpeed + txSpeed);
+                            if (history.length > maxHistory) history.shift();
+                            
+                            const chart = document.getElementById('chart-bars');
+                            const max = Math.max(...history, 1024);
+                            chart.innerHTML = history.map(val => {
+                                const height = (val / max) * 100;
+                                return `<div style="flex: 1; height: ${height}%; background: #0d6efd; opacity: 0.6; min-width: 2px;"></div>`;
+                            }).join('');
+                        }
+                        
+                        lastBytes = { rx: data.bytes_recv, tx: data.bytes_sent, time: now };
+                    });
+            }
+            setInterval(updateTraffic, 1000);
+            updateTraffic();
+        </script>
         <div class="row mt-4">
             <div class="col-md-6">
                 <div class="card">

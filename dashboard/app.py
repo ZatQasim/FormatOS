@@ -43,12 +43,16 @@ def index():
                          stats=get_stats_real(),
                          threats=get_threats_real())
 
-@app.route('/api/packets')
-def get_packet_analytics():
-    # Real packet data combined with active threat scanning
+@app.route('/api/traffic')
+def get_traffic_live():
+    # Fetch real network I/O stats using psutil
+    io_counters = psutil.net_io_counters()
     return jsonify({
-        "protocols": {"TCP": 70, "UDP": 20, "ICMP": 10},
-        "threats": get_threats_real()
+        "bytes_sent": io_counters.bytes_sent,
+        "bytes_recv": io_counters.bytes_recv,
+        "packets_sent": io_counters.packets_sent,
+        "packets_recv": io_counters.packets_recv,
+        "timestamp": datetime.datetime.now().isoformat()
     })
 
 import zipfile
