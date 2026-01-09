@@ -54,9 +54,17 @@ def download_script():
     
     # Map requested extension to the zip content for now as a wrapper
     # In a real build pipeline this would trigger the actual cross-compile
+    mimetype = 'application/octet-stream'
+    if ext == 'apk':
+        mimetype = 'application/vnd.android.package-archive'
+    elif ext == 'exe':
+        mimetype = 'application/x-msdownload'
+    elif ext == 'dmg':
+        mimetype = 'application/x-apple-diskimage'
+
     return send_file(
         memory_file,
-        mimetype='application/octet-stream',
+        mimetype=mimetype,
         as_attachment=True,
         download_name=f'FormatRoute_{platform}.{ext}'
     )
