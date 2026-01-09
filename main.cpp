@@ -88,22 +88,16 @@ int main(int argc, char* argv[]) {
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 
-    SettingsApp settings;
-    // settings.launch();
-
-    FileManagerApp fileManager;
-    // fileManager.launch();
-
     Desktop desktop;
     desktop.login("admin", "1234"); // Auto-login for demo purposes
     desktop.notify("Welcome to FormatOS");
     
-    // Detect "mobile" resolution for optimization
-    int w, h;
-    SDL_GetRendererOutputSize(renderer, &w, &h);
-    if (w < 600) {
-        std::cout << "[System] Mobile optimization enabled.\n";
-        // Mobile layout: one window at a time, full screen
+    // Smooth transition animation from black to desktop
+    for (int i = 0; i <= 255; i += 15) {
+        SDL_SetRenderDrawColor(renderer, 30, 31, 34, i); // Desktop base color
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(10);
     }
 
     desktop.openAppWindow("Settings");
