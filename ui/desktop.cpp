@@ -12,6 +12,8 @@
 
 #include "notification.h"
 
+#include "../apps/media_viewer_app.h"
+
 class Desktop {
 private:
     WindowManager wm;
@@ -26,6 +28,7 @@ public:
         systemApps.push_back(new SettingsApp());
         systemApps.push_back(new FileManagerApp());
         systemApps.push_back(new BrowserApp());
+        systemApps.push_back(new MediaViewerApp());
     }
 
     ~Desktop() {
@@ -41,19 +44,25 @@ public:
         int w, h;
         SDL_GetRendererOutputSize(renderer, &w, &h);
 
-        // Linux-style Desktop (Dark Grey/Slate)
-        SDL_SetRenderDrawColor(renderer, 30, 31, 34, 255);
+        // Linux-style Desktop (Dark Slate/Grey)
+        SDL_SetRenderDrawColor(renderer, 28, 30, 34, 255);
         SDL_RenderClear(renderer);
 
-        // Sidebar Launcher (GNOME-style)
-        SDL_SetRenderDrawColor(renderer, 20, 20, 20, 200);
-        SDL_Rect sidebar = {0, 0, 60, h - 50};
+        // GNOME-style Sidebar Launcher
+        SDL_SetRenderDrawColor(renderer, 20, 20, 20, 220);
+        SDL_Rect sidebar = {5, 5, 50, h - 60};
         SDL_RenderFillRect(renderer, &sidebar);
 
+        // Sidebar Apps with simple hover/animation effect (placeholder)
         for (size_t i = 0; i < systemApps.size(); ++i) {
-            SDL_SetRenderDrawColor(renderer, 60, 60, 60, 255);
-            SDL_Rect icon = {10, 20 + (int)i * 60, 40, 40};
+            SDL_SetRenderDrawColor(renderer, 45, 45, 45, 255);
+            SDL_Rect icon = {12, 25 + (int)i * 60, 36, 36};
             SDL_RenderFillRect(renderer, &icon);
+            
+            // Animation dot for running apps
+            SDL_SetRenderDrawColor(renderer, 0, 200, 255, 255);
+            SDL_Rect dot = {2, 40 + (int)i * 60, 4, 10};
+            SDL_RenderFillRect(renderer, &dot);
         }
 
         wm.renderWindows(renderer);

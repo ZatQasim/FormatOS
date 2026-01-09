@@ -31,17 +31,23 @@ public:
                     n.active = false;
                     continue;
                 }
-                // Animation: slide in from right
-                int x = screenWidth - 260;
-                SDL_SetRenderDrawColor(renderer, 45, 45, 50, 230);
-                SDL_Rect box = {x, yOffset, 250, 60};
+                
+                // Animation: slide in and fade
+                int animOffset = 0;
+                if (now - n.startTime < 500) {
+                    animOffset = 300 - (int)((now - n.startTime) * 0.6);
+                }
+                
+                int x = screenWidth - 260 + animOffset;
+                SDL_SetRenderDrawColor(renderer, 35, 35, 40, 240);
+                SDL_Rect box = {x, yOffset, 250, 65};
                 SDL_RenderFillRect(renderer, &box);
                 
-                SDL_SetRenderDrawColor(renderer, 0, 200, 255, 255);
-                SDL_Rect accent = {x, yOffset, 5, 60};
+                SDL_SetRenderDrawColor(renderer, 0, 150, 255, 255);
+                SDL_Rect accent = {x, yOffset, 4, 65};
                 SDL_RenderFillRect(renderer, &accent);
                 
-                yOffset += 70;
+                yOffset += 75;
             }
         }
     }
