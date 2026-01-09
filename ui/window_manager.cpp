@@ -88,21 +88,37 @@ public:
                 SDL_Rect maxBtn = {w.x + 55, w.y + 14, 12, 12};
                 SDL_RenderFillRect(renderer, &maxBtn);
 
-                // --- App Icons Inside Window ---
-                // App Manager Icon
-                SDL_SetRenderDrawColor(renderer, 139, 233, 253, 255); // Cyan
-                SDL_Rect appMgrIcon = {w.x + 20, w.y + 60, 48, 48};
+                // --- App Icons on Desktop/Inside Window ---
+                // App Manager Icon (Cyan with "A" symbol)
+                SDL_SetRenderDrawColor(renderer, 139, 233, 253, 255); 
+                SDL_Rect appMgrIcon = {w.x + 40, w.y + 80, 64, 64};
                 SDL_RenderFillRect(renderer, &appMgrIcon);
+                // "A" Symbol placeholder
+                SDL_SetRenderDrawColor(renderer, 40, 42, 54, 255);
+                SDL_Rect appMgrSym = {w.x + 60, w.y + 90, 24, 40};
+                SDL_RenderFillRect(renderer, &appMgrSym);
 
-                // Browser Icon
-                SDL_SetRenderDrawColor(renderer, 255, 121, 198, 255); // Pink
-                SDL_Rect browserIcon = {w.x + 80, w.y + 60, 48, 48};
+                // Browser Icon (Pink with "B" symbol)
+                SDL_SetRenderDrawColor(renderer, 255, 121, 198, 255);
+                SDL_Rect browserIcon = {w.x + 140, w.y + 80, 64, 64};
                 SDL_RenderFillRect(renderer, &browserIcon);
+                // "B" Symbol placeholder
+                SDL_SetRenderDrawColor(renderer, 40, 42, 54, 255);
+                SDL_Rect browserSym = {w.x + 160, w.y + 90, 24, 40};
+                SDL_RenderFillRect(renderer, &browserSym);
 
-                // File Explorer Icon
-                SDL_SetRenderDrawColor(renderer, 241, 250, 140, 255); // Yellow
-                SDL_Rect fileExpIcon = {w.x + 140, w.y + 60, 48, 48};
+                // File Explorer Icon (Yellow with "F" symbol)
+                SDL_SetRenderDrawColor(renderer, 241, 250, 140, 255);
+                SDL_Rect fileExpIcon = {w.x + 240, w.y + 80, 64, 64};
                 SDL_RenderFillRect(renderer, &fileExpIcon);
+                // "F" Symbol placeholder
+                SDL_SetRenderDrawColor(renderer, 40, 42, 54, 255);
+                SDL_Rect fileExpSym = {w.x + 260, w.y + 90, 24, 40};
+                SDL_RenderFillRect(renderer, &fileExpSym);
+
+                // Handling click to launch apps (simulated in event loop)
+                // Note: Real click detection would be in main.cpp or window_manager input handler
+                // Labels are implicitly the app identity for this visualization phase.
             }
         }
     }

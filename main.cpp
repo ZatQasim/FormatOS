@@ -111,7 +111,24 @@ int main(int argc, char* argv[]) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) running = false;
             if (e.type == SDL_MOUSEBUTTONDOWN) {
-                // Future: implementation for window selection/dragging
+                int mx, my;
+                SDL_GetMouseState(&mx, &my);
+                // Simple click detection for desktop app icons (hardcoded regions for demo)
+                // App Manager
+                if (mx > 40 && mx < 104 && my > 80 && my < 144) {
+                    std::cout << "[System] Launching App Manager...\n";
+                    desktop.openAppWindow("App Manager");
+                } 
+                // Browser
+                else if (mx > 140 && mx < 204 && my > 80 && my < 144) {
+                    std::cout << "[System] Launching Browser...\n";
+                    desktop.openAppWindow("Browser");
+                } 
+                // File Explorer
+                else if (mx > 240 && mx < 304 && my > 80 && my < 144) {
+                    std::cout << "[System] Launching File Explorer...\n";
+                    desktop.openAppWindow("File Manager");
+                }
             }
         }
 
