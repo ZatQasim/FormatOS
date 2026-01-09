@@ -37,7 +37,7 @@ outputType = "webview"
 expertMode = true
 
 [nix]
-packages = ["wget"]
+packages = ["imagemagickBig", "sox", "tcpdump", "wget", "wireshark"]
 channel = "stable-25_05"
 
 [[ports]]
