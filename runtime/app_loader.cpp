@@ -10,27 +10,42 @@ class App {
 public:
     std::string name;
     std::string path;
-    std::string status;
+    enum class State { IDLE, RUNNING, SUSPENDED, TERMINATED };
+    State state;
 
-    App(const std::string& n, const std::string& p) : name(n), path(p), status("IDLE") {}
+    App(const std::string& n, const std::string& p) : name(n), path(p), state(State::IDLE) {}
     
-    virtual void run() {
-        status = "RUNNING";
-        std::cout << "[App Loader] Loading app: " << name << " (" << status << ") from " << path << "\n";
+    virtual void launch() {
+        state = State::RUNNING;
+        std::cout << "[App Lifecycle] Launching: " << name << " (" << path << ")\n";
         Sandbox sandbox;
         sandbox.loadApp(this);
     }
 
+    virtual void suspend() {
+        if (state == State::RUNNING) {
+            state = State::SUSPENDED;
+            std::cout << "[App Lifecycle] Suspending: " << name << "\n";
+        }
+    }
+
+    virtual void resume() {
+        if (state == State::SUSPENDED) {
+            state = State::RUNNING;
+            std::cout << "[App Lifecycle] Resuming: " << name << "\n";
+        }
+    }
+
     virtual void terminate() {
-        status = "TERMINATED";
-        std::cout << "[App Loader] Terminating app: " << name << " (" << status << ")\n";
+        state = State::TERMINATED;
+        std::cout << "[App Lifecycle] Terminated: " << name << "\n";
     }
 };
 
 class AppLoader {
 public:
-    void loadApp(App* app) {
-        if (app) app->run();
+    void loadAndLaunch(App* app) {
+        if (app) app->launch();
     }
 };
 

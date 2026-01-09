@@ -96,7 +96,14 @@ public:
     }
 
     void openAppWindow(const std::string& appName) {
-        wm.openWindow(appName);
+        for (auto app : systemApps) {
+            if (app->name == appName) {
+                app->launch();
+                wm.openWindow(appName);
+                notify("Started " + appName);
+                return;
+            }
+        }
     }
 
     void closeAppWindow(const std::string& appName) {

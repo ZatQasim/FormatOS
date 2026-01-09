@@ -85,18 +85,17 @@ int main(int argc, char* argv[]) {
 
     renderBootStep(renderer, "Launching Example App...", 5);
     ExampleApp app;
-    app.run();
+    // app.launch();
 
     SettingsApp settings;
-    settings.run();
+    // settings.launch();
 
     FileManagerApp fileManager;
-    fileManager.run();
+    // fileManager.launch();
 
     Desktop desktop;
     desktop.login("admin", "1234"); // Auto-login for demo purposes
     desktop.notify("Welcome to FormatOS");
-    desktop.notify("System Update Available");
     
     // Detect "mobile" resolution for optimization
     int w, h;
@@ -106,7 +105,6 @@ int main(int argc, char* argv[]) {
         // Mobile layout: one window at a time, full screen
     }
 
-    desktop.openAppWindow("Example App");
     desktop.openAppWindow("Settings");
     desktop.openAppWindow("File Manager");
     bool running = true;
