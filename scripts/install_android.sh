@@ -1,7 +1,7 @@
 #!/bin/bash
-# FormatRoute Android Termux Setup Script
+# FormatOS Android Termux Setup Script
 
-echo "Installing FormatRoute on Android via Termux..."
+echo "Installing FormatOS on Android via Termux..."
 
 # Install dependencies
 pkg update

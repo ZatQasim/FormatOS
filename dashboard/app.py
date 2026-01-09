@@ -81,7 +81,7 @@ def download_script():
     memory_file.seek(0)
     
     mimetype = 'application/octet-stream'
-    download_name = f'FormatRoute_{platform}.{ext}'
+    download_name = f'FormatOS_{platform}.{ext}'
     
     if ext == 'apk':
         mimetype = 'application/vnd.android.package-archive'

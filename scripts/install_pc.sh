@@ -1,7 +1,7 @@
 #!/bin/bash
-# FormatRoute Setup Script for Linux/WSL2
+# FormatOS Setup Script for Linux/WSL2
 
-echo "Installing FormatRoute Routing Software..."
+echo "Installing FormatOS Routing Software..."
 
 # Install dependencies
 sudo apt-get update
@@ -16,7 +16,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Download source (simplified for instruction)
-echo "Please ensure you have copied the FormatRoute files to $(pwd)"
+echo "Please ensure you have copied the FormatOS files to $(pwd)"
 
 # Install Python requirements
 pip install flask psutil
