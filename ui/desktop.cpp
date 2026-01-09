@@ -6,6 +6,9 @@
 #include "window_manager.cpp"
 #include "taskbar.cpp"
 #include "../services/user_manager.h"
+#include "../apps/settings_app.h"
+#include "../apps/file_manager_app.h"
+#include "../apps/browser_app.h"
 
 class Desktop {
 private:
@@ -13,9 +16,18 @@ private:
     Taskbar taskbar;
     UserManager userManager;
     bool isAuthenticated;
+    std::vector<App*> systemApps;
 
 public:
-    Desktop() : isAuthenticated(false) {}
+    Desktop() : isAuthenticated(false) {
+        systemApps.push_back(new SettingsApp());
+        systemApps.push_back(new FileManagerApp());
+        systemApps.push_back(new BrowserApp());
+    }
+
+    ~Desktop() {
+        for (auto app : systemApps) delete app;
+    }
 
     void render(SDL_Renderer* renderer) {
         if (!isAuthenticated) {
@@ -26,15 +38,17 @@ public:
         int w, h;
         SDL_GetRendererOutputSize(renderer, &w, &h);
 
-        // Draw wallpaper
-        SDL_SetRenderDrawColor(renderer, 30, 60, 90, 255);
+        // Draw wallpaper (Modern gradient look)
+        SDL_SetRenderDrawColor(renderer, 20, 40, 60, 255);
         SDL_RenderClear(renderer);
 
-        // Draw icons (placeholder)
-        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
-        for (int i = 0; i < 4; ++i) {
-            SDL_Rect icon = {50, 50 + (i * 100), 64, 64};
+        // Draw modern icons
+        for (size_t i = 0; i < systemApps.size(); ++i) {
+            SDL_SetRenderDrawColor(renderer, 50, 100, 150, 255);
+            SDL_Rect icon = {40, 40 + (int)i * 100, 64, 64};
             SDL_RenderFillRect(renderer, &icon);
+            // Label
+            std::cout << "[Desktop] Rendering icon for: " << systemApps[i]->name << "\n";
         }
 
         wm.renderWindows(renderer);
@@ -42,9 +56,20 @@ public:
     }
 
     void renderLogin(SDL_Renderer* renderer) {
+        // Modern glass login screen
         SDL_SetRenderDrawColor(renderer, 20, 20, 25, 255);
         SDL_RenderClear(renderer);
-        // Login UI placeholder
+
+        // Glass panel
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 30);
+        SDL_Rect panel = {250, 150, 300, 300};
+        SDL_RenderFillRect(renderer, &panel);
+
+        // Logo in login
+        SDL_SetRenderDrawColor(renderer, 0, 200, 255, 255);
+        SDL_Rect logo = {385, 200, 30, 30};
+        SDL_RenderFillRect(renderer, &logo);
     }
 
     void login(const std::string& user, const std::string& pin) {
