@@ -1,0 +1,7 @@
+[System Log] FormatOS v0.1-alpha
+[System Log] Boot sequence started
+[System Log] Kernel loaded successfully
+[System Log] Runtime initialized
+[System Log] Services loaded: recovery, remote_console, update_manager, network_manager
+[System Log] UI loaded: window_manager, desktop, taskbar
+[System Log] Apps loaded: Example App
