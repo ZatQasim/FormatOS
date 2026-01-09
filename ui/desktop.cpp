@@ -75,6 +75,9 @@ public:
     }
 
     void renderLogin(SDL_Renderer* renderer) {
+        int w, h;
+        SDL_GetRendererOutputSize(renderer, &w, &h);
+        
         // Modern glass login screen
         SDL_SetRenderDrawColor(renderer, 20, 20, 25, 255);
         SDL_RenderClear(renderer);
@@ -82,12 +85,12 @@ public:
         // Glass panel
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 30);
-        SDL_Rect panel = {250, 150, 300, 300};
+        SDL_Rect panel = {w/2 - 150, h/2 - 150, 300, 300};
         SDL_RenderFillRect(renderer, &panel);
 
         // Logo in login
         SDL_SetRenderDrawColor(renderer, 0, 200, 255, 255);
-        SDL_Rect logo = {385, 200, 30, 30};
+        SDL_Rect logo = {w/2 - 15, h/2 - 100, 30, 30};
         SDL_RenderFillRect(renderer, &logo);
     }
 
