@@ -36,7 +36,7 @@ void renderBootStep(SDL_Renderer* renderer, const char* step, int stepNumber) {
     SDL_RenderPresent(renderer);
     std::cout << "[BOOT] " << step << std::endl;
 
-    SDL_Delay(1000);
+    SDL_Delay(200); // Faster boot transition
 }
 
 int main(int argc, char* argv[]) {
@@ -83,9 +83,10 @@ int main(int argc, char* argv[]) {
     renderBootStep(renderer, "Initializing App Loader...", 4);
     initAppLoader();
 
-    renderBootStep(renderer, "Launching Example App...", 5);
-    ExampleApp app;
-    // app.launch();
+    // Quickly clear boot screen and show main UI
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
 
     SettingsApp settings;
     // settings.launch();
