@@ -9,5 +9,15 @@
     "height": 1080
   },
   "network_enabled": true,
-  "auto_update": false
+  "auto_update": false,
+  "security": {
+    "secure_boot": true,
+    "kernel_hardening": "SELinux",
+    "app_sandbox": true,
+    "encryption": "AES-256"
+  },
+  "compliance": {
+    "license": "GPL-3.0",
+    "gms_ready": false
+  }
 }

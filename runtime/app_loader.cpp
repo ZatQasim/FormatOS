@@ -10,13 +10,20 @@ class App {
 public:
     std::string name;
     std::string path;
+    std::string status;
 
-    App(const std::string& n, const std::string& p) : name(n), path(p) {}
+    App(const std::string& n, const std::string& p) : name(n), path(p), status("IDLE") {}
     
     virtual void run() {
-        std::cout << "[App Loader] Loading app: " << name << " from " << path << "\n";
+        status = "RUNNING";
+        std::cout << "[App Loader] Loading app: " << name << " (" << status << ") from " << path << "\n";
         Sandbox sandbox;
-        sandbox.loadApp(this); // Run inside sandbox
+        sandbox.loadApp(this);
+    }
+
+    virtual void terminate() {
+        status = "TERMINATED";
+        std::cout << "[App Loader] Terminating app: " << name << " (" << status << ")\n";
     }
 };
 

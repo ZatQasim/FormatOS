@@ -9,9 +9,19 @@ void loadKernelModules() {
     mod.init();
 }
 
+void initSystemServices() {
+    std::cout << "[Kernel] Starting init system (PID 1)...\n";
+    std::cout << "[Kernel] Services started reliably.\n";
+}
+
+void powerManagement(const std::string& action) {
+    std::cout << "[Kernel] Power Management: " << action << " initiated...\n";
+}
+
 void initKernel() {
-    std::cout << "[Kernel] Linux kernel initialized.\n";
+    std::cout << "[Kernel] Linux kernel (LTS) initialized.\n";
     loadKernelModules();
+    initSystemServices();
 }
 
 // Optional main for testing kernel independently
