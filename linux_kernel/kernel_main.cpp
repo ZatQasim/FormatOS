@@ -3,6 +3,11 @@
 #include "modules/sample_module.cpp"
 
 // Make sure these are global functions callable from bootloader
+void kernelMain() {
+    std::cout << "[Kernel] Main entry point reached.\n";
+    initKernel();
+}
+
 void loadKernelModules() {
     std::cout << "[Kernel] Loading kernel modules...\n";
     SampleModule mod;

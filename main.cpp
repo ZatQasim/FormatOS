@@ -2,14 +2,23 @@
 #include <iostream>
 
 // Forward declarations for your modules
-void boot();
-void kernelMain();
-void initRecovery();
-void initAppLoader();
+#include "bootloader/boot.cpp"
+#include "linux_kernel/kernel_main.cpp"
+#include "services/recovery.cpp"
+#include "runtime/app_loader.cpp"
+#include "ui/desktop.cpp"
 
-class ExampleApp {
+void initRecovery() {
+    initRecoveryService();
+}
+
+class ExampleApp : public App {
 public:
-    void run();
+    ExampleApp() : App("Example App", "apps/example_app.cpp") {}
+    void run() override {
+        App::run();
+        std::cout << "[ExampleApp] Running graphical interface...\n";
+    }
 };
 
 // Simple visual boot step renderer
