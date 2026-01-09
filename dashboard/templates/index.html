@@ -107,6 +107,41 @@
                 });
             });
         </script>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Security Threat Report</h5>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover table-sm mt-2">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Source IP</th>
+                                        <th>Target</th>
+                                        <th>Threat Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="threat-list">
+                                    {% for threat in threats %}
+                                    <tr>
+                                        <td>{{ threat.time }}</td>
+                                        <td class="text-danger">{{ threat.source }}</td>
+                                        <td>{{ threat.target }}</td>
+                                        <td><span class="badge bg-warning text-dark">{{ threat.type }}</span></td>
+                                        <td><button class="btn btn-outline-danger btn-sm py-0">Block</button></td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No active threats detected in scanning...</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
