@@ -52,26 +52,29 @@ def download_script():
     
     memory_file.seek(0)
     
-    # Map requested extension to the zip content for now as a wrapper
-    # In a real build pipeline this would trigger the actual cross-compile
     mimetype = 'application/octet-stream'
+    download_name = f'FormatRoute_{platform}.{ext}'
+    
     if ext == 'apk':
-        mimetype = 'application/zip' # Revert to zip mimetype as it is actually a zip for now
+        mimetype = 'application/vnd.android.package-archive'
+        # Serve the generated binary as the APK to ensure it's a valid binary format
+        return send_file(
+            'android_installer.bin',
+            mimetype=mimetype,
+            as_attachment=True,
+            download_name=download_name
+        )
     elif ext == 'exe':
         mimetype = 'application/x-msdownload'
     elif ext == 'dmg':
         mimetype = 'application/x-apple-diskimage'
 
-    # For APK, we must ensure the browser doesn't try to parse it as a broken installer
-    # and instead treats it as a file to be handled by the OS after download
-    response = send_file(
+    return send_file(
         memory_file,
         mimetype=mimetype,
         as_attachment=True,
-        download_name=f'FormatRoute_{platform}.{ext}'
+        download_name=download_name
     )
-    # Removing direct Content-Disposition override to let send_file handle it properly
-    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
