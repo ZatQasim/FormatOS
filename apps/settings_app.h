@@ -7,8 +7,8 @@
 class SettingsApp : public App {
 public:
     SettingsApp() : App("Settings", "apps/settings.cpp") {}
-    void run() override {
-        App::run();
+    void launch() override {
+        App::launch();
         std::cout << "[SettingsApp] Rendering System Settings UI...\n";
     }
 };

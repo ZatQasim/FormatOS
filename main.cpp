@@ -18,8 +18,8 @@ void initRecovery() {
 class ExampleApp : public App {
 public:
     ExampleApp() : App("Example App", "apps/example_app.cpp") {}
-    void run() override {
-        App::run();
+    void launch() override {
+        App::launch();
         std::cout << "[ExampleApp] Running graphical interface...\n";
     }
 };

@@ -7,8 +7,8 @@
 class FileManagerApp : public App {
 public:
     FileManagerApp() : App("File Manager", "apps/file_explorer.cpp") {}
-    void run() override {
-        App::run();
+    void launch() override {
+        App::launch();
         std::cout << "[FileManagerApp] Rendering File Explorer UI...\n";
     }
 };

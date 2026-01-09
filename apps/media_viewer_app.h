@@ -7,8 +7,8 @@
 class MediaViewerApp : public App {
 public:
     MediaViewerApp() : App("Media Viewer", "apps/media_viewer.cpp") {}
-    void run() override {
-        App::run();
+    void launch() override {
+        App::launch();
         std::cout << "[MediaViewerApp] Rendering Media Gallery and Video Player UI...\n";
     }
 };
