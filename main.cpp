@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
     std::cout << "--- FORMAT OS BOOT SEQUENCE ---\n";
 
     // Initialize SDL2
+    setenv("SDL_VIDEODRIVER", "x11", 1);
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 1;
