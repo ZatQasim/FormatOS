@@ -73,8 +73,7 @@ public:
                 SDL_Rect titleBar = {w.x, w.y, w.width, 40};
                 SDL_RenderFillRect(renderer, &titleBar);
 
-                // Control Buttons
-                // Close (Red)
+                // Close Button (Red)
                 SDL_SetRenderDrawColor(renderer, 255, 85, 85, 255);
                 SDL_Rect closeBtn = {w.x + 15, w.y + 14, 12, 12};
                 SDL_RenderFillRect(renderer, &closeBtn);
@@ -88,6 +87,22 @@ public:
                 SDL_SetRenderDrawColor(renderer, 80, 250, 123, 255);
                 SDL_Rect maxBtn = {w.x + 55, w.y + 14, 12, 12};
                 SDL_RenderFillRect(renderer, &maxBtn);
+
+                // --- App Icons Inside Window ---
+                // App Manager Icon
+                SDL_SetRenderDrawColor(renderer, 139, 233, 253, 255); // Cyan
+                SDL_Rect appMgrIcon = {w.x + 20, w.y + 60, 48, 48};
+                SDL_RenderFillRect(renderer, &appMgrIcon);
+
+                // Browser Icon
+                SDL_SetRenderDrawColor(renderer, 255, 121, 198, 255); // Pink
+                SDL_Rect browserIcon = {w.x + 80, w.y + 60, 48, 48};
+                SDL_RenderFillRect(renderer, &browserIcon);
+
+                // File Explorer Icon
+                SDL_SetRenderDrawColor(renderer, 241, 250, 140, 255); // Yellow
+                SDL_Rect fileExpIcon = {w.x + 140, w.y + 60, 48, 48};
+                SDL_RenderFillRect(renderer, &fileExpIcon);
             }
         }
     }
