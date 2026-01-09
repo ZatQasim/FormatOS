@@ -23,5 +23,10 @@ def update_config():
     # Logic to update NAT/Firewall would go here
     return jsonify({"status": "success", "message": "Routing configuration updated"})
 
+@app.route('/download')
+def download_script():
+    # In a real app, this would serve the script file
+    return "To download, click 'Export as Zip' in the Replit menu, then run 'bash scripts/install_pc.sh' on your PC."
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
