@@ -1,13 +1,15 @@
+#ifndef REMOTE_CONSOLE_H
+#define REMOTE_CONSOLE_H
+
 #include <iostream>
 #include <string>
 
 void initRemoteConsole() {
-    std::cout << "[Remote Console] Service started.\n";
-    std::cout << "[Remote Console] Listening for remote commands...\n";
-    // Placeholder: Connect to server or accept remote commands
+    std::cout << "[Remote Console] Remote access service started on port 2222.\n";
 }
 
-void processCommand(const std::string& command) {
-    std::cout << "[Remote Console] Received command: " << command << "\n";
-    // Placeholder: Execute command or route to OS system
+void logToConsole(const std::string& msg) {
+    std::cout << "[Remote Console Log] " << msg << "\n";
 }
+
+#endif

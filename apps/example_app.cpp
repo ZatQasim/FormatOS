@@ -1,3 +1,6 @@
+#ifndef EXAMPLE_APP_H
+#define EXAMPLE_APP_H
+
 #include <iostream>
 #include <string>
 #include "../runtime/formatapi.cpp"
@@ -12,29 +15,24 @@ private:
 
 public:
     void run() {
-        std::cout << "[Example App] Running Example App...\n";
-
-        // Open a window on the desktop
+        std::cout << "[Example App] Initializing inside sandbox...\n";
+        
+        api.logEvent("Example App Started");
         desktop.openAppWindow("Example App");
-
-        // Add app to taskbar
         taskbar.addApp("Example App");
-
-        // Show message via FormatAPI
-        api.showMessage("Hello from Example App!");
-
-        // List open windows
+        
+        api.showMessage("Welcome to FormatOS!");
+        
         desktop.listWindows();
-
-        // List running apps
         taskbar.showRunningApps();
+        
+        // Simulate interaction
+        desktop.handleInput("Mouse Click at (100, 200)");
+        
+        std::cout << "[Example App] Closing...\n";
+        desktop.closeAppWindow("Example App");
+        taskbar.removeApp("Example App");
     }
 };
 
-/*
-int main() {
-    ExampleApp app;
-    app.run();
-    return 0;
-}
-*/
+#endif

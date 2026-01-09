@@ -3,20 +3,25 @@
 #include "services/recovery.cpp"
 #include "runtime/app_loader.cpp"
 #include "apps/example_app.cpp"
+#include <iostream>
 
 int main() {
-    // Start bootloader (calls initKernel)
+    std::cout << "--- FORMAT OS BOOT SEQUENCE ---\n";
+    
+    // 1. Bootloader & Kernel
     boot();
 
-    // Start recovery service
-    initRecoveryService();
-
-    // Load and run example app
-    AppLoader loader;
-    // ExampleApp now should inherit from App if we want to use AppLoader
-    // For now let's just run it directly as the user code had it
+    // 2. Runtime & Apps
+    initAppLoader();
+    
+    std::cout << "\n--- LOADING USER ENVIRONMENT ---\n";
     ExampleApp* app = new ExampleApp();
     app->run();
+    delete app;
+
+    std::cout << "\n--- SHUTDOWN SEQUENCE ---\n";
+    std::cout << "[System] All processes terminated. Syncing disks...\n";
+    std::cout << "[System] Power down.\n";
 
     return 0;
 }

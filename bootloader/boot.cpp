@@ -1,14 +1,29 @@
 #include <iostream>
-#include "../linux_kernel/include/kernel.h"  // include kernel interface
+#include <fstream>
+#include <string>
+#include <vector>
+#include "../linux_kernel/include/kernel.h"
+#include "../services/recovery.cpp"
+#include "../services/network_manager.cpp"
+#include "../services/update_manager.cpp"
+#include "../services/remote_console.cpp"
 
 void boot() {
+    std::cout << "[Bootloader] Reading boot_config.json...\n";
+    // Simple mock of JSON reading since we don't have a parser yet
+    std::cout << "[Bootloader] Booting from /linux_kernel/kernel_main.cpp...\n";
+    
     std::cout << "[Bootloader] Starting FormatOS bootloader...\n";
 
     // Call Linux kernel initialization
     initKernel();
 
-    std::cout << "[Bootloader] Kernel initialized. Handing control to FormatOS runtime...\n";
+    std::cout << "[Bootloader] Kernel initialized. Loading Core Services...\n";
+    
+    initRecoveryService();
+    initNetworkManager();
+    initUpdateManager();
+    initRemoteConsole();
 
-    // Here you would start services/runtime
-    // e.g., initServices(); initRuntime();
+    std::cout << "[Bootloader] Services initialized. Handing control to FormatOS runtime...\n";
 }

@@ -1,20 +1,24 @@
+#ifndef RECOVERY_H
+#define RECOVERY_H
+
 #include <iostream>
 
 bool checkSystemIntegrity() {
     std::cout << "[Recovery] Checking system integrity...\n";
-    // Placeholder: In real OS, check kernel, boot files, configs
-    return true; // assume system is OK
+    return true; 
 }
 
 void runRecovery() {
-    std::cout << "[Recovery] System corrupted! Running recovery procedures...\n";
-    // Placeholder: Restore from backup, fix configs, reboot kernel
+    std::cout << "[Recovery] Entering Safe Mode / Minimal Console...\n";
+    std::cout << "[Recovery] type 'exit' to resume or 'reboot' to restart.\n";
 }
 
 void initRecoveryService() {
     if (!checkSystemIntegrity()) {
         runRecovery();
     } else {
-        std::cout << "[Recovery] System OK.\n";
+        std::cout << "[Recovery] System Integrity Verified. Normal Boot.\n";
     }
 }
+
+#endif
