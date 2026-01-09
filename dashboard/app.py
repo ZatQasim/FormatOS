@@ -27,8 +27,13 @@ import zipfile
 import io
 from flask import Flask, render_template, jsonify, request, send_file
 
+@app.route('/options')
+def options():
+    return render_template('options.html')
+
 @app.route('/download')
 def download_script():
+    platform = request.args.get('platform', 'pc')
     # Create a zip file in memory containing all necessary project files
     memory_file = io.BytesIO()
     with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
@@ -48,7 +53,7 @@ def download_script():
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
-        download_name='FormatRoute.zip'
+        download_name=f'FormatRoute_{platform}.zip'
     )
 
 if __name__ == '__main__':
