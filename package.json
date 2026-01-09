@@ -1,0 +1,9 @@
+{
+  "name": "formatos",
+  "version": "1.0.0",
+  "description": "Modular operating system on Linux kernel",
+  "main": "index.js",
+  "scripts": {
+    "dev": "g++ -I./linux_kernel/include main.cpp -o os_entry && ./os_entry"
+  }
+}
