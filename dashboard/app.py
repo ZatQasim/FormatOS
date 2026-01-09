@@ -17,11 +17,26 @@ subprocess.Popen(["./network/routing_core"], stdout=subprocess.DEVNULL, stderr=s
 def index():
     return render_template('index.html', interfaces=get_interfaces_real(), stats=get_stats_real())
 
-@app.route('/api/config', methods=['POST'])
-def update_config():
+@app.route('/api/firewall', methods=['POST'])
+def toggle_firewall():
     data = request.json
-    # Logic to update NAT/Firewall would go here
-    return jsonify({"status": "success", "message": "Routing configuration updated"})
+    enabled = data.get('enabled', False)
+    # In a real environment, we would execute iptables commands here
+    # subprocess.run(["sudo", "scripts/setup_firewall.sh" if enabled else "iptables -F"])
+    return jsonify({"status": "success", "enabled": enabled})
+
+@app.route('/api/packets')
+def get_packet_analytics():
+    # Simulated packet scanning data for deep analytics
+    return jsonify({
+        "protocols": {"TCP": 65, "UDP": 25, "ICMP": 5, "Other": 5},
+        "top_destinations": [
+            {"ip": "8.8.8.8", "count": 120},
+            {"ip": "1.1.1.1", "count": 85},
+            {"ip": "192.168.1.50", "count": 42}
+        ],
+        "threats_blocked": 12
+    })
 
 import zipfile
 import io

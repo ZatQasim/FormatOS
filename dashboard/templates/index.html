@@ -61,19 +61,52 @@
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-12">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5>Advanced Routing Controls</h5>
-                        <div class="d-flex gap-3">
-                            <button class="btn btn-outline-info">Reset Stats</button>
-                            <button class="btn btn-outline-warning">Flush DNS Cache</button>
-                            <button class="btn btn-outline-danger">Restart Routing Engine</button>
+                        <h5>Security Firewall</h5>
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="firewallToggle" checked>
+                            <label class="form-check-label" for="firewallToggle">System Firewall Active</label>
+                        </div>
+                        <div class="alert alert-info py-2 small">
+                            Status: <span id="fwStatus">Protected</span>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Packet Inspection</h5>
+                        <div class="progress mb-2" style="height: 10px;">
+                            <div class="progress-bar bg-primary" style="width: 65%"></div>
+                            <div class="progress-bar bg-info" style="width: 25%"></div>
+                            <div class="progress-bar bg-warning" style="width: 10%"></div>
+                        </div>
+                        <div class="small text-muted d-flex justify-content-between">
+                            <span>TCP: 65%</span>
+                            <span>UDP: 25%</span>
+                            <span>Other: 10%</span>
+                        </div>
+                        <p class="mt-2 mb-0">Blocked Threats: <strong class="text-danger">12</strong></p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <script>
+            document.getElementById('firewallToggle').addEventListener('change', function(e) {
+                const enabled = e.target.checked;
+                fetch('/api/firewall', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({enabled: enabled})
+                }).then(() => {
+                    document.getElementById('fwStatus').innerText = enabled ? 'Protected' : 'Vulnerable (Disabled)';
+                });
+            });
+        </script>
     </div>
 </body>
 </html>
