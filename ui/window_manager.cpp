@@ -54,10 +54,19 @@ public:
         std::cout << "[WindowManager] Window not found: " << title << "\n";
     }
 
-    void listOpenWindows() {
-        std::cout << "[WindowManager] Open windows:\n";
+    void renderWindows(SDL_Renderer* renderer) {
         for (const auto &w : windows) {
-            if (w.isOpen) std::cout << " - " << w.title << "\n";
+            if (w.isOpen) {
+                // Draw window frame
+                SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+                SDL_Rect frame = {w.x, w.y, w.width, w.height};
+                SDL_RenderFillRect(renderer, &frame);
+
+                // Draw title bar
+                SDL_SetRenderDrawColor(renderer, 50, 50, 200, 255);
+                SDL_Rect titleBar = {w.x, w.y, w.width, 30};
+                SDL_RenderFillRect(renderer, &titleBar);
+            }
         }
     }
 };

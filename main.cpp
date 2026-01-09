@@ -8,6 +8,9 @@
 #include "runtime/app_loader.cpp"
 #include "ui/desktop.cpp"
 
+#include "apps/settings_app.h"
+#include "apps/file_manager_app.h"
+
 void initRecovery() {
     initRecoveryService();
 }
@@ -83,6 +86,32 @@ int main(int argc, char* argv[]) {
     renderBootStep(renderer, "Launching Example App...", 5);
     ExampleApp app;
     app.run();
+
+    SettingsApp settings;
+    settings.run();
+
+    FileManagerApp fileManager;
+    fileManager.run();
+
+    Desktop desktop;
+    desktop.openAppWindow("Example App");
+    desktop.openAppWindow("Settings");
+    desktop.openAppWindow("File Manager");
+    bool running = true;
+    SDL_Event e;
+
+    while (running) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) running = false;
+            if (e.type == SDL_MOUSEBUTTONDOWN) {
+                // Future: implementation for window selection/dragging
+            }
+        }
+
+        desktop.render(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16); // ~60 FPS
+    }
 
     renderBootStep(renderer, "Syncing Disks & Powering Down...", 6);
 
