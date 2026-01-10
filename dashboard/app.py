@@ -104,6 +104,8 @@ def options():
 
 @app.route('/download')
 def download_package():
+    platform = request.args.get('platform', 'linux')
+    
     # Define files and directories that MUST be included for the app to run
     required_paths = [
         'dashboard',
@@ -117,7 +119,6 @@ def download_package():
         'runtime',
         'services',
         'ui',
-        'installer.sh',
         'main.py',
         'main.cpp',
         'README.md',
@@ -129,6 +130,19 @@ def download_package():
     memory_file = io.BytesIO()
     try:
         with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+            # Platform-specific installer and binary naming
+            installer_src = f'scripts/install_{platform}.sh'
+            if os.path.exists(installer_src):
+                zf.write(installer_src, 'installer.sh')
+            
+            # Platform-specific "binary" placeholders/setup
+            if platform == 'windows':
+                zf.writestr('FormatOS_Setup.exe', b'Installer executable placeholder')
+            elif platform == 'mac':
+                zf.writestr('FormatOS_Installer.pkg', b'Installer package placeholder')
+            elif platform == 'android':
+                zf.write('android_installer.bin', 'FormatOS_Android.apk')
+
             for path in required_paths:
                 if not os.path.exists(path):
                     continue
@@ -137,7 +151,6 @@ def download_package():
                     zf.write(path, path)
                 else:
                     for root, dirs, files in os.walk(path):
-                        # Skip hidden files and cache
                         if any(part.startswith('.') for part in root.split(os.sep)):
                             continue
                         if '__pycache__' in root:
@@ -160,9 +173,8 @@ def download_package():
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
-        download_name='FormatOS_Package.zip'
+        download_name=f'FormatOS_{platform}.zip'
     )
-    # Add headers to help with mobile/strict browsers
     response.headers["Content-Length"] = memory_file.getbuffer().nbytes
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response

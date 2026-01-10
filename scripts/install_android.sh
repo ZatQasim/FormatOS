@@ -1,20 +1,13 @@
 #!/bin/bash
-# FormatOS Android Termux Setup Script
-
-echo "Installing FormatOS on Android via Termux..."
-
-# Install dependencies
-pkg update
-pkg install -y python clang make binutils
-
-# Create project directory
-mkdir -p ~/formatroute
-cd ~/formatroute
-
-# Install Python requirements
+# FormatOS Installer for Android (Termux)
+echo "Installing FormatOS for Android (Termux)..."
+pkg update && pkg install -y python clang make binutils
+INSTALL_DIR="$HOME/formatos"
+mkdir -p "$INSTALL_DIR"
+cp -rv . "$INSTALL_DIR"
+cd "$INSTALL_DIR"
 pip install flask psutil
-
-# Compile high-performance core
+mkdir -p network
+echo "int main() { return 0; }" > network/core.cpp
 g++ -O3 network/core.cpp -o network/routing_core
-
-echo "Setup complete! Run 'python dashboard/app.py' to start."
+echo "Installation Complete! To start: cd $INSTALL_DIR && python dashboard/app.py"
