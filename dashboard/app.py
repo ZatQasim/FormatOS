@@ -103,48 +103,30 @@ def options():
     return render_template('options.html')
 
 @app.route('/download')
-def download_script():
-    platform = request.args.get('platform', 'pc')
-    ext = request.args.get('ext', 'zip')
-    
+def download_package():
     # Create a zip file in memory containing all necessary project files
     memory_file = io.BytesIO()
     with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
-        # List of files/directories to include (recursive for directories)
+        # List of files/directories to include
         for root, dirs, files in os.walk('.'):
-            # Skip hidden files/folders and replit specific stuff
+            # Skip hidden files/folders and specific excluded patterns
             if any(part.startswith('.') for part in root.split(os.sep)):
                 continue
+            if 'venv' in root or '__pycache__' in root:
+                continue
+                
             for file in files:
                 file_path = os.path.join(root, file)
-                # Remove leading './'
                 arcname = os.path.relpath(file_path, '.')
                 zf.write(file_path, arcname)
     
     memory_file.seek(0)
     
-    mimetype = 'application/octet-stream'
-    download_name = f'FormatOS_{platform}.{ext}'
-    
-    if ext == 'apk':
-        mimetype = 'application/vnd.android.package-archive'
-        # Serve the generated binary as the APK to ensure it's a valid binary format
-        return send_file(
-            'android_installer.bin',
-            mimetype=mimetype,
-            as_attachment=True,
-            download_name=download_name
-        )
-    elif ext == 'exe':
-        mimetype = 'application/x-msdownload'
-    elif ext == 'dmg':
-        mimetype = 'application/x-apple-diskimage'
-
     return send_file(
         memory_file,
-        mimetype=mimetype,
+        mimetype='application/zip',
         as_attachment=True,
-        download_name=download_name
+        download_name='FormatOS_Package.zip'
     )
 
 if __name__ == '__main__':
