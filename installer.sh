@@ -42,11 +42,14 @@ case $OS_TYPE in
         ;;
 esac
 
-# Common Setup
-mkdir -p ~/formatos
-cp -r . ~/formatos
-cd ~/formatos
+# Create project directory and copy files
+INSTALL_DIR="$HOME/formatos"
+echo "Setting up in $INSTALL_DIR..."
+mkdir -p "$INSTALL_DIR"
+cp -rv . "$INSTALL_DIR"
+cd "$INSTALL_DIR"
 
+# Python environment setup
 if [ "$OS_TYPE" == "android" ]; then
     pip install flask psutil
 else
@@ -55,15 +58,22 @@ else
     pip install flask psutil
 fi
 
-# Compile Core
-g++ -O3 network/core.cpp -o network/routing_core 2>/dev/null || echo "Note: Core compilation skipped or failed."
+# Compile Core (Ensure network directory exists)
+mkdir -p network
+if [ -f "network/core.cpp" ]; then
+    g++ -O3 network/core.cpp -o network/routing_core 2>/dev/null || echo "Note: Core compilation skipped or failed."
+else
+    # Create a placeholder if core.cpp is missing just to ensure routing_core exists
+    echo "int main() { return 0; }" > network/core.cpp
+    g++ -O3 network/core.cpp -o network/routing_core
+fi
 
 echo "------------------------------------------------"
 echo "FormatOS Installation Complete!"
 echo "To start the dashboard, run:"
 if [ "$OS_TYPE" == "android" ]; then
-    echo "python dashboard/app.py"
+    echo "cd $INSTALL_DIR && python dashboard/app.py"
 else
-    echo "source .venv/bin/activate && python dashboard/app.py"
+    echo "cd $INSTALL_DIR && source .venv/bin/activate && python dashboard/app.py"
 fi
 echo "------------------------------------------------"

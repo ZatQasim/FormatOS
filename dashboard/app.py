@@ -104,41 +104,68 @@ def options():
 
 @app.route('/download')
 def download_package():
-    # Create a zip file in memory containing all necessary project files
+    # Define files and directories that MUST be included for the app to run
+    required_paths = [
+        'dashboard',
+        'network',
+        'config',
+        'scripts',
+        'apps',
+        'bootloader',
+        'drivers',
+        'linux_kernel',
+        'runtime',
+        'services',
+        'ui',
+        'installer.sh',
+        'main.py',
+        'main.cpp',
+        'README.md',
+        'replit.md',
+        'package.json',
+        'pyproject.toml'
+    ]
+    
     memory_file = io.BytesIO()
     try:
         with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
-            # List of files/directories to include
-            for root, dirs, files in os.walk('.'):
-                # Skip hidden files/folders and specific excluded patterns
-                if any(part.startswith('.') for part in root.split(os.sep)):
-                    continue
-                
-                # Exclude large/problematic directories
-                excluded_dirs = {'venv', '.venv', '__pycache__', 'attached_assets', 'node_modules'}
-                if any(ex in root.split(os.sep) for ex in excluded_dirs):
+            for path in required_paths:
+                if not os.path.exists(path):
                     continue
                     
-                for file in files:
-                    file_path = os.path.join(root, file)
-                    # Skip problematic files
-                    if file.endswith('.pyc') or file.endswith('.pyo') or file.startswith('.replit'):
-                        continue
-                    
-                    arcname = os.path.relpath(file_path, '.')
-                    zf.write(file_path, arcname)
+                if os.path.isfile(path):
+                    zf.write(path, path)
+                else:
+                    for root, dirs, files in os.walk(path):
+                        # Skip hidden files and cache
+                        if any(part.startswith('.') for part in root.split(os.sep)):
+                            continue
+                        if '__pycache__' in root:
+                            continue
+                            
+                        for file in files:
+                            if file.endswith(('.pyc', '.pyo')):
+                                continue
+                            file_path = os.path.join(root, file)
+                            arcname = os.path.relpath(file_path, '.')
+                            zf.write(file_path, arcname)
+                            
     except Exception as e:
         print(f"Zip generation error: {e}")
-        return jsonify({"status": "error", "message": "Failed to generate package"}), 500
+        return jsonify({"status": "error", "message": str(e)}), 500
     
     memory_file.seek(0)
     
-    return send_file(
+    response = send_file(
         memory_file,
         mimetype='application/zip',
         as_attachment=True,
         download_name='FormatOS_Package.zip'
     )
+    # Add headers to help with mobile/strict browsers
+    response.headers["Content-Length"] = memory_file.getbuffer().nbytes
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
