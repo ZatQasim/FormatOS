@@ -1,12 +1,12 @@
+#include "ui/desktop.cpp"
 #include <SDL2/SDL.h>
 #include <iostream>
 
 // Forward declarations for your modules
-#include "bootloader/boot.cpp"
-#include "linux_kernel/kernel_main.cpp"
-#include "services/recovery.cpp"
-#include "runtime/app_loader.cpp"
-#include "ui/desktop.cpp"
+void boot();
+void kernelMain();
+void initRecoveryService();
+void initAppLoader();
 
 #include "apps/settings_app.h"
 #include "apps/file_manager_app.h"
