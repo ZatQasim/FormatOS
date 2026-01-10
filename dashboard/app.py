@@ -105,6 +105,10 @@ def options():
 @app.route('/download')
 def download_package():
     platform = request.args.get('platform', 'linux')
+    # Validate platform to prevent path injection or unexpected errors
+    valid_platforms = ['windows', 'mac', 'linux', 'android']
+    if platform not in valid_platforms:
+        platform = 'linux'
     
     # Define files and directories that MUST be included for the app to run
     required_paths = [
@@ -134,14 +138,22 @@ def download_package():
             installer_src = f'scripts/install_{platform}.sh'
             if os.path.exists(installer_src):
                 zf.write(installer_src, 'installer.sh')
+            else:
+                # Fallback to generic if specific is missing to prevent crash
+                if os.path.exists('installer.sh'):
+                    zf.write('installer.sh', 'installer.sh')
             
             # Platform-specific "binary" placeholders/setup
+            # These ensure the zip content meets the user's specific platform expectations
             if platform == 'windows':
-                zf.writestr('FormatOS_Setup.exe', b'Installer executable placeholder')
+                zf.writestr('FormatOS_Setup.exe', b'This is a placeholder for the FormatOS Windows installer. Run installer.sh via WSL2 for full setup.')
             elif platform == 'mac':
-                zf.writestr('FormatOS_Installer.pkg', b'Installer package placeholder')
+                zf.writestr('FormatOS_Installer.pkg', b'This is a placeholder for the FormatOS macOS installer. Run installer.sh in Terminal for full setup.')
             elif platform == 'android':
-                zf.write('android_installer.bin', 'FormatOS_Android.apk')
+                if os.path.exists('android_installer.bin'):
+                    zf.write('android_installer.bin', 'FormatOS_Android.apk')
+                else:
+                    zf.writestr('FormatOS_Android.apk', b'This is a placeholder for the FormatOS Android APK.')
 
             for path in required_paths:
                 if not os.path.exists(path):
@@ -151,6 +163,7 @@ def download_package():
                     zf.write(path, path)
                 else:
                     for root, dirs, files in os.walk(path):
+                        # Skip hidden files and cache
                         if any(part.startswith('.') for part in root.split(os.sep)):
                             continue
                         if '__pycache__' in root:
@@ -160,24 +173,31 @@ def download_package():
                             if file.endswith(('.pyc', '.pyo')):
                                 continue
                             file_path = os.path.join(root, file)
-                            arcname = os.path.relpath(file_path, '.')
-                            zf.write(file_path, arcname)
+                            try:
+                                arcname = os.path.relpath(file_path, '.')
+                                zf.write(file_path, arcname)
+                            except Exception as zip_e:
+                                print(f"Skipping file {file_path} due to error: {zip_e}")
                             
     except Exception as e:
         print(f"Zip generation error: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({"status": "error", "message": "Failed to generate package. Please try again."}), 500
     
     memory_file.seek(0)
     
-    response = send_file(
-        memory_file,
-        mimetype='application/zip',
-        as_attachment=True,
-        download_name=f'FormatOS_{platform}.zip'
-    )
-    response.headers["Content-Length"] = memory_file.getbuffer().nbytes
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    return response
+    try:
+        response = send_file(
+            memory_file,
+            mimetype='application/zip',
+            as_attachment=True,
+            download_name=f'FormatOS_{platform}.zip'
+        )
+        response.headers["Content-Length"] = memory_file.getbuffer().nbytes
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        return response
+    except Exception as send_e:
+        print(f"Send file error: {send_e}")
+        return jsonify({"status": "error", "message": "Download failed during transmission."}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
