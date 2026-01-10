@@ -1,8 +1,8 @@
 {
   "apps": [
     {
-      "name": "Example App",
-      "path": "apps/example_app.cpp",
+      "name": "FormatUI App",
+      "path": "apps/formatui_app.cpp",
       "auto_start": true
     },
     {

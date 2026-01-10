@@ -1,5 +1,5 @@
 #include <iostream>
 
 void initRecoveryService() {
-    std::cout << "Recovery: Service started." << std::endl;
+    std::cout << "FormatOS is in recovery mode - checking bootloader now..." << std::endl;
 }

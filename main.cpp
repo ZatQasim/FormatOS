@@ -17,7 +17,7 @@ void initRecovery() {
 
 class ExampleApp : public App {
 public:
-    ExampleApp() : App("Example App", "apps/example_app.cpp") {}
+    ExampleApp() : App("Example App", "apps/formatui_app.cpp") {}
     void launch() override {
         App::launch();
         std::cout << "[ExampleApp] Running graphical interface...\n";
