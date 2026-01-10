@@ -19,31 +19,43 @@ public:
         SDL_Rect navbar = {0, 0, 1024, 60};
         SDL_RenderFillRect(renderer, &navbar);
 
-        // Cards
+        // Cards (Layout containers)
         SDL_SetRenderDrawColor(renderer, 36, 40, 45, 255);
-        SDL_Rect card1 = {20, 80, 300, 150};
-        SDL_Rect card2 = {340, 80, 660, 150};
-        SDL_Rect card3 = {20, 250, 980, 250};
-        SDL_Rect card4 = {20, 520, 480, 200};
-        SDL_Rect card5 = {520, 520, 480, 200};
+        SDL_Rect trafficCard = {20, 80, 480, 200};     // Real-time Traffic Monitor
+        SDL_Rect statsCard = {520, 80, 480, 200};      // System Stats
+        SDL_Rect threatCard = {20, 300, 980, 200};     // Security Threat Report
+        SDL_Rect scannerCard = {20, 520, 980, 220};    // Live Packet Scanner
         
-        SDL_RenderFillRect(renderer, &card1);
-        SDL_RenderFillRect(renderer, &card2);
-        SDL_RenderFillRect(renderer, &card3);
-        SDL_RenderFillRect(renderer, &card4);
-        SDL_RenderFillRect(renderer, &card5);
+        SDL_RenderFillRect(renderer, &trafficCard);
+        SDL_RenderFillRect(renderer, &statsCard);
+        SDL_RenderFillRect(renderer, &threatCard);
+        SDL_RenderFillRect(renderer, &scannerCard);
 
-        // Traffic Chart mockup (the blue pulse)
-        SDL_SetRenderDrawColor(renderer, 13, 110, 253, 100);
-        SDL_Rect chart = {40, 400, 940, 80};
-        SDL_RenderFillRect(renderer, &chart);
-        
-        SDL_SetRenderDrawColor(renderer, 13, 110, 253, 255);
-        SDL_RenderDrawLine(renderer, 40, 400, 980, 400);
+        // --- Traffic Monitor (Real-time graph bars) ---
+        SDL_SetRenderDrawColor(renderer, 13, 110, 253, 255); // Blue
+        for(int i=0; i<15; i++) {
+            SDL_Rect bar = {40 + (i*30), 240 - (rand()%100), 20, 0};
+            bar.h = 240 - bar.y;
+            SDL_RenderFillRect(renderer, &bar);
+        }
 
-        // Threat List mockup (red text simulation)
-        SDL_SetRenderDrawColor(renderer, 220, 53, 69, 255);
-        SDL_Rect threatLine = {40, 600, 440, 2};
-        SDL_RenderFillRect(renderer, &threatLine);
+        // --- Security Threat Report (Rows) ---
+        SDL_SetRenderDrawColor(renderer, 220, 53, 69, 255); // Red for threats
+        for(int i=0; i<3; i++) {
+            SDL_Rect threatRow = {40, 340 + (i*40), 940, 2};
+            SDL_RenderFillRect(renderer, &threatRow);
+        }
+
+        // --- Live Packet Scanner (Flow simulation) ---
+        SDL_SetRenderDrawColor(renderer, 25, 135, 84, 255); // Green for active packets
+        for(int i=0; i<10; i++) {
+            SDL_Rect packet = {40 + (rand()%900), 550 + (rand()%150), 10, 10};
+            SDL_RenderFillRect(renderer, &packet);
+        }
+
+        // Navbar Title
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_Rect titlePlaceholder = {20, 20, 150, 20};
+        SDL_RenderFillRect(renderer, &titlePlaceholder);
     }
 };
