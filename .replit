@@ -17,15 +17,6 @@ task = "workflow.run"
 args = "vcr-view-main"
 
 [[workflows.workflow]]
-name = "Systems"
-mode = "sequential"
-author = 52806342
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = ""
-
-[[workflows.workflow]]
 name = "routing-dashboard"
 author = "agent"
 
@@ -38,12 +29,12 @@ waitForPort = 5000
 outputType = "webview"
 
 [[workflows.workflow]]
-name = "vcr-view-main"
+name = "FormatOS Systems"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "./os_entry"
+args = "./os_entry && python dashboard/app.py"
 
 [workflows.workflow.metadata]
 outputType = "vnc"
