@@ -10,34 +10,23 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "routing-dashboard"
+args = "vcr-view-main"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "vcr-view-main"
-
-[[workflows.workflow]]
-name = "routing-dashboard"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python dashboard/app.py"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
+args = "FormatOS Systems"
 
 [[workflows.workflow]]
 name = "FormatOS Systems"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "./os_entry && python dashboard/app.py"
-
-[workflows.workflow.metadata]
-outputType = "vnc"
+args = "python dashboard/app.py"
+waitForPort = 5000
 
 [agent]
 expertMode = true
