@@ -106,19 +106,30 @@ def options():
 def download_package():
     # Create a zip file in memory containing all necessary project files
     memory_file = io.BytesIO()
-    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
-        # List of files/directories to include
-        for root, dirs, files in os.walk('.'):
-            # Skip hidden files/folders and specific excluded patterns
-            if any(part.startswith('.') for part in root.split(os.sep)):
-                continue
-            if 'venv' in root or '__pycache__' in root:
-                continue
+    try:
+        with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+            # List of files/directories to include
+            for root, dirs, files in os.walk('.'):
+                # Skip hidden files/folders and specific excluded patterns
+                if any(part.startswith('.') for part in root.split(os.sep)):
+                    continue
                 
-            for file in files:
-                file_path = os.path.join(root, file)
-                arcname = os.path.relpath(file_path, '.')
-                zf.write(file_path, arcname)
+                # Exclude large/problematic directories
+                excluded_dirs = {'venv', '.venv', '__pycache__', 'attached_assets', 'node_modules'}
+                if any(ex in root.split(os.sep) for ex in excluded_dirs):
+                    continue
+                    
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    # Skip problematic files
+                    if file.endswith('.pyc') or file.endswith('.pyo') or file.startswith('.replit'):
+                        continue
+                    
+                    arcname = os.path.relpath(file_path, '.')
+                    zf.write(file_path, arcname)
+    except Exception as e:
+        print(f"Zip generation error: {e}")
+        return jsonify({"status": "error", "message": "Failed to generate package"}), 500
     
     memory_file.seek(0)
     
