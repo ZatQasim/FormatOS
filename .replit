@@ -12,6 +12,10 @@ author = "agent"
 task = "workflow.run"
 args = "routing-dashboard"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "vcr-view-main"
+
 [[workflows.workflow]]
 name = "Systems"
 mode = "sequential"
@@ -32,6 +36,17 @@ waitForPort = 5000
 
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow]]
+name = "vcr-view-main"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "./os_entry"
+
+[workflows.workflow.metadata]
+outputType = "vnc"
 
 [agent]
 expertMode = true
