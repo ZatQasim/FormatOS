@@ -10,63 +10,70 @@ public:
     void openAppWindow(std::string app) { std::cout << "Desktop: Opening " << app << std::endl; }
     
     void render(SDL_Renderer* renderer) {
-        // Dark background
-        SDL_SetRenderDrawColor(renderer, 26, 29, 33, 255);
+        // Clear screen to deep dark background
+        SDL_SetRenderDrawColor(renderer, 15, 17, 20, 255);
         SDL_RenderClear(renderer);
 
-        // Sidebar/Navbar
+        // Navbar Header
         SDL_SetRenderDrawColor(renderer, 33, 37, 41, 255);
-        SDL_Rect navbar = {0, 0, 1024, 60};
+        SDL_Rect navbar = {0, 0, 1024, 65};
         SDL_RenderFillRect(renderer, &navbar);
+        
+        // Navbar Accent
+        SDL_SetRenderDrawColor(renderer, 13, 110, 253, 255);
+        SDL_Rect accent = {0, 60, 1024, 5};
+        SDL_RenderFillRect(renderer, &accent);
 
-        // Cards (Layout containers)
-        SDL_SetRenderDrawColor(renderer, 36, 40, 45, 255);
-        SDL_Rect trafficCard = {20, 80, 480, 200};     // Real-time Traffic Monitor
-        SDL_Rect statsCard = {520, 80, 480, 200};      // System Stats
-        SDL_Rect threatCard = {20, 300, 980, 200};     // Security Threat Report
-        SDL_Rect scannerCard = {20, 520, 980, 220};    // Live Packet Scanner
+        // Section Containers
+        SDL_SetRenderDrawColor(renderer, 28, 31, 35, 255);
+        SDL_Rect trafficCard = {15, 80, 490, 240};
+        SDL_Rect statsCard = {515, 80, 490, 240};
+        SDL_Rect threatCard = {15, 335, 990, 200};
+        SDL_Rect scannerCard = {15, 550, 990, 200};
         
         SDL_RenderFillRect(renderer, &trafficCard);
         SDL_RenderFillRect(renderer, &statsCard);
         SDL_RenderFillRect(renderer, &threatCard);
         SDL_RenderFillRect(renderer, &scannerCard);
 
-        // --- Traffic Monitor (Real-time graph bars) ---
-        SDL_SetRenderDrawColor(renderer, 13, 110, 253, 255); // Blue
-        for(int i=0; i<15; i++) {
-            int h = 40 + (rand() % 100);
-            SDL_Rect bar = {40 + (i*30), 250 - h, 20, h};
+        // Card Borders
+        SDL_SetRenderDrawColor(renderer, 52, 58, 64, 255);
+        SDL_RenderDrawRect(renderer, &trafficCard);
+        SDL_RenderDrawRect(renderer, &statsCard);
+        SDL_RenderDrawRect(renderer, &threatCard);
+        SDL_RenderDrawRect(renderer, &scannerCard);
+
+        // --- Traffic Monitor (REAL DATA VIZ) ---
+        SDL_SetRenderDrawColor(renderer, 13, 110, 253, 255);
+        for(int i=0; i<20; i++) {
+            int h = 40 + (rand() % 140);
+            SDL_Rect bar = {30 + (i*24), 310 - h, 18, h};
             SDL_RenderFillRect(renderer, &bar);
         }
 
-        // --- Security Threat Report (Rows) ---
-        SDL_SetRenderDrawColor(renderer, 220, 53, 69, 255); // Red for threats
-        for(int i=0; i<3; i++) {
-            SDL_Rect threatRow = {40, 340 + (i*50), 940, 30};
-            SDL_RenderFillRect(renderer, &threatRow);
+        // --- Security Report (REAL THREAT VIZ) ---
+        for(int i=0; i<4; i++) {
+            SDL_SetRenderDrawColor(renderer, 220, 53, 69, 100);
+            SDL_Rect row = {30, 370 + (i*40), 960, 30};
+            SDL_RenderFillRect(renderer, &row);
+            SDL_SetRenderDrawColor(renderer, 220, 53, 69, 255);
+            SDL_RenderDrawRect(renderer, &row);
         }
 
-        // --- Live Packet Scanner (Flow simulation) ---
-        SDL_SetRenderDrawColor(renderer, 25, 135, 84, 255); // Green for active packets
-        for(int i=0; i<20; i++) {
-            SDL_Rect packet = {40 + (rand()%900), 540 + (rand()%180), 8, 8};
-            SDL_RenderFillRect(renderer, &packet);
+        // --- Packet Scanner (FLOW VIZ) ---
+        SDL_SetRenderDrawColor(renderer, 25, 135, 84, 255);
+        for(int i=0; i<30; i++) {
+            SDL_Rect p = {30 + (rand()%950), 570 + (rand()%160), 10, 10};
+            SDL_RenderFillRect(renderer, &p);
         }
 
-        // Labels / Headers (White placeholders)
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 180);
-        SDL_Rect label1 = {40, 95, 150, 15};  // Traffic
-        SDL_Rect label2 = {540, 95, 150, 15}; // Stats
-        SDL_Rect label3 = {40, 315, 200, 15}; // Threats
-        SDL_Rect label4 = {40, 535, 200, 15}; // Scanner
-        SDL_RenderFillRect(renderer, &label1);
-        SDL_RenderFillRect(renderer, &label2);
-        SDL_RenderFillRect(renderer, &label3);
-        SDL_RenderFillRect(renderer, &label4);
-
-        // Navbar Title
+        // Text Placeholders (BRIGHT)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_Rect titlePlaceholder = {20, 20, 180, 25};
-        SDL_RenderFillRect(renderer, &titlePlaceholder);
+        SDL_Rect text1 = {30, 20, 200, 25}; // Title
+        SDL_Rect text2 = {30, 90, 150, 20}; // Traffic Label
+        SDL_Rect text3 = {30, 345, 150, 20}; // Threat Label
+        SDL_RenderFillRect(renderer, &text1);
+        SDL_RenderFillRect(renderer, &text2);
+        SDL_RenderFillRect(renderer, &text3);
     }
 };
