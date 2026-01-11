@@ -6,7 +6,7 @@
 
 ## Developer
 
-**FormatOS** was developed by **Mohamed Mohamed Diriye**, designed for users who want full control over Linux-based networking and system configuration.
+**FormatOS** was developed by ZatQasim (**Mohamed Mohamed Diriye**), designed for users who want full control over Linux-based networking and system configuration.
 
 ---
 
