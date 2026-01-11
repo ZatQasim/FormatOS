@@ -125,50 +125,46 @@ def download_package():
     if platform not in valid_platforms:
         platform = 'linux'
     
-    # Refined list of essential files
+    # Refined list of essential files for core functionality
     essential_paths = [
         'dashboard',
         'network/routing_core',
+        'network/monitor.py',
         'config/system_config.json',
         'config/app_config.json',
         'updater.py',
-        'version.txt'
+        'version.txt',
+        'main.py'
     ]
     
+    # Platform specific installers
     if not is_update:
-        essential_paths.extend(['installer.sh', 'main.py'])
+        essential_paths.extend(['installer.sh'])
+        inst_src = f'scripts/install_{platform}.sh'
+        if os.path.exists(inst_src):
+            zf.write(inst_src, 'installer.sh')
+        
+        # Add platform binary markers
+        if platform == 'android':
+            zf.writestr('FormatOS_Android.apk', b'\x50\x4B\x03\x04' + b'A' * 100)
+        elif platform == 'windows':
+            zf.writestr('FormatOS_Setup.exe', b'Windows Binary Placeholder')
+        elif platform == 'mac':
+            zf.writestr('FormatOS_Installer.pkg', b'Mac Binary Placeholder')
 
-    memory_file = io.BytesIO()
-    try:
-        with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
-            # Platform specific installer
-            if not is_update:
-                inst_src = f'scripts/install_{platform}.sh'
-                if os.path.exists(inst_src):
-                    zf.write(inst_src, 'installer.sh')
-                
-                if platform == 'android':
-                    # Fix Android parse error: Provide a real but small binary if possible
-                    # Or at least ensure it's not empty and has correct naming
-                    zf.writestr('FormatOS_Android.apk', b'\x50\x4B\x03\x04' + b'A' * 100) # Zip header + dummy
-                elif platform == 'windows':
-                    zf.writestr('FormatOS_Setup.exe', b'Windows Binary Placeholder')
-                elif platform == 'mac':
-                    zf.writestr('FormatOS_Installer.pkg', b'Mac Binary Placeholder')
-
-            for path in essential_paths:
-                if not os.path.exists(path):
+    for path in essential_paths:
+        if not os.path.exists(path):
+            continue
+        if os.path.isfile(path):
+            zf.write(path, path)
+        else:
+            for root, dirs, files in os.walk(path):
+                if '__pycache__' in root or any(p.startswith('.') for p in root.split(os.sep)):
                     continue
-                if os.path.isfile(path):
-                    zf.write(path, path)
-                else:
-                    for root, dirs, files in os.walk(path):
-                        if '__pycache__' in root or any(p.startswith('.') for p in root.split(os.sep)):
-                            continue
-                        for file in files:
-                            f_path = os.path.join(root, file)
-                            arcname = os.path.relpath(f_path, '.')
-                            zf.write(f_path, arcname)
+                for file in files:
+                    f_path = os.path.join(root, file)
+                    arcname = os.path.relpath(f_path, '.')
+                    zf.write(f_path, arcname)
                             
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
