@@ -107,8 +107,7 @@ def check_update():
     client_version = request.args.get('version', '1.0.0')
     latest_version = "1.0.1"
     if client_version < latest_version:
-        # Construct the full domain for the update URL
-        domain = os.environ.get('REPL_SLUG', 'formatos') + "." + os.environ.get('REPL_OWNER', 'user') + ".repl.co"
+        domain = os.environ.get('REPL_SLUG', 'formatos') + "." + os.environ.get('REPL_OWNER', 'user') + ".replit.app"
         return jsonify({
             "update_available": True,
             "version": latest_version,
@@ -137,36 +136,42 @@ def download_package():
         'main.py'
     ]
     
-    # Platform specific installers
-    if not is_update:
-        essential_paths.extend(['installer.sh'])
-        inst_src = f'scripts/install_{platform}.sh'
-        if os.path.exists(inst_src):
-            zf.write(inst_src, 'installer.sh')
-        
-        # Add platform binary markers
-        if platform == 'android':
-            zf.writestr('FormatOS_Android.apk', b'\x50\x4B\x03\x04' + b'A' * 100)
-        elif platform == 'windows':
-            zf.writestr('FormatOS_Setup.exe', b'Windows Binary Placeholder')
-        elif platform == 'mac':
-            zf.writestr('FormatOS_Installer.pkg', b'Mac Binary Placeholder')
+    memory_file = io.BytesIO()
+    try:
+        with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+            # Platform specific installers
+            if not is_update:
+                essential_paths.append('installer.sh')
+                inst_src = f'scripts/install_{platform}.sh'
+                if os.path.exists(inst_src):
+                    zf.write(inst_src, 'installer.sh')
+                elif os.path.exists('installer.sh'):
+                    zf.write('installer.sh', 'installer.sh')
+                
+                # Add platform binary markers
+                if platform == 'android':
+                    zf.writestr('FormatOS_Android.apk', b'\x50\x4B\x03\x04' + b'A' * 100)
+                elif platform == 'windows':
+                    zf.writestr('FormatOS_Setup.exe', b'Windows Binary Placeholder')
+                elif platform == 'mac':
+                    zf.writestr('FormatOS_Installer.pkg', b'Mac Binary Placeholder')
 
-    for path in essential_paths:
-        if not os.path.exists(path):
-            continue
-        if os.path.isfile(path):
-            zf.write(path, path)
-        else:
-            for root, dirs, files in os.walk(path):
-                if '__pycache__' in root or any(p.startswith('.') for p in root.split(os.sep)):
+            for path in essential_paths:
+                if not os.path.exists(path):
                     continue
-                for file in files:
-                    f_path = os.path.join(root, file)
-                    arcname = os.path.relpath(f_path, '.')
-                    zf.write(f_path, arcname)
+                if os.path.isfile(path):
+                    zf.write(path, path)
+                else:
+                    for root, dirs, files in os.walk(path):
+                        if '__pycache__' in root or any(p.startswith('.') for p in root.split(os.sep)):
+                            continue
+                        for file in files:
+                            f_path = os.path.join(root, file)
+                            arcname = os.path.relpath(f_path, '.')
+                            zf.write(f_path, arcname)
                             
     except Exception as e:
+        print(f"Zip generation error: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
     
     memory_file.seek(0)

@@ -99,7 +99,43 @@
             }
             setInterval(updateTraffic, 1000);
             updateTraffic();
+
+            function checkUpdate() {
+                const status = document.getElementById('update-status');
+                status.innerText = "Checking...";
+                fetch('/api/check_update')
+                    .then(r => {
+                        if (!r.ok) throw new Error('Network response was not ok');
+                        const contentType = r.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            return r.json();
+                        }
+                        throw new TypeError("Oops, we haven't got JSON!");
+                    })
+                    .then(data => {
+                        if (data.update_available) {
+                            status.innerHTML = `Update available: ${data.version}. <a href="${data.download_url}" class="text-info">Download Package</a>`;
+                        } else {
+                            status.innerText = "Your system is up to date.";
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Update check failed:', err);
+                        status.innerText = "Update check failed. Please try again later.";
+                    });
+            }
         </script>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card bg-dark text-white mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">System Update</h5>
+                        <p id="update-status">Checking for updates...</p>
+                        <button class="btn btn-primary" onclick="checkUpdate()">Check Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row mt-4">
             <div class="col-md-6">
                 <div class="card">
